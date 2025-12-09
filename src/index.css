@@ -1,0 +1,28 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&family=Edu+NSW+ACT+Cursive:wght@400..700&display=swap');
+.cursive {
+  font-family: "Cedarville Cursive", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.active {
+  background-color: #78350F;
+  color: white;
+  font-weight: 700;
+  border-radius: 20px;
+  padding: 5px;
+}
+.wavy {
+  border: 4px wavy #4a90e2;
+}
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Rock 3D";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/rock-3d-v13-latin-regular.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+.font3d {
+  font-family: "Rock 3D", cursive;
+}

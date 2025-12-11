@@ -1,9 +1,13 @@
 import { FaTrashAlt } from "react-icons/fa";
 import { CiEdit } from "react-icons/ci";
 import { useState } from "react";
+import { collection, query, orderBy, onSnapshot, doc, deleteDoc} from "firebase/firestore";
+import { db } from "../firebase/firebaseConfig";
+import UseFirestore from "../hooks/UseFirestore";
 
 function TodoList({ todos }) {
-    const [done, setDone] = useState([])
+  const {deleteTodo} = UseFirestore()
+  const [done, setDone] = useState([]);
   const months = [
     "January",
     "February",
@@ -18,22 +22,46 @@ function TodoList({ todos }) {
     "November",
     "December",
   ];
- const handleDone=(id)=>{
-setDone((prev)=>{
-return prev.includes(id)?
- prev.filter((item)=>{
-return item!==id
-}): [...prev, id]
-})
- }
+  const handleDone = (id) => {
+    setDone((prev) => {
+      return prev.includes(id)
+        ? prev.filter((item) => {
+            return item !== id;
+          })
+        : [...prev, id];
+    });
+  };
+  const handleDelete=(id)=>{
 
+    deleteTodo("mytodos", id)
+
+  }
+
+  const q=query(
+    collection(db, "mytodos"),
+    orderBy("createdAt", "desc"),
+  )
+
+  onSnapshot(q, (snapshot)=>{
+    const todos=snapshot.docs.map((doc)=>{
+   return  { id:doc.id,
+      ...doc.data()}
+    })
+  } )
 
   return (
     <div className="ml-6 cursive ">
-        <h1 className="ml-6 font-bold text-[25px] font3d text-amber-900 ">Todos</h1>
+    {todos.length ?   <h1 className="ml-6 font-bold text-[25px] font3d text-amber-900 ">
+        Todos
+      </h1> : <h1 className="ml-6- mt-5  font-bold text-[25px] font3d text-amber-900 ">No todos created yet. </h1> }
+      {!todos.length && <div>
+       
+      </div> }
       {todos.map(({ id, title, date, deadline }) => {
-        const deadlineDay = deadline.toDate().getDate();
-        const deadlineMonth = deadline.toDate().getMonth();
+      const deadlineDate= deadline?.toDate? deadline.toDate() : new Date(deadline)
+
+        const deadlineDay = deadlineDate.getDate();
+        const deadlineMonth = deadlineDate.getMonth();
         const day = date.toDate().getDate();
         const month = date.toDate().getMonth();
         const hours = date.toDate().getHours();
@@ -48,17 +76,23 @@ return item!==id
             : hours + ":" + minutes
         }  `;
         return (
-          <div className="flex items-center gap-3 ml-6 relative group "  key={id} >
+          <div
+            className="flex items-center gap-3 ml-6 relative group "
+            key={id}
+          >
             <input
               type="checkbox"
               className="accent-amber-800 w-3.5 h-3.5 border-amber-700 "
               onClick={() => {
                 handleDone(id);
               }}
-            /> 
+            />
             <div
-             
-              className={done.includes(id) ? `line-through w-[500px] px-5 py-3 cursor-pointer mb-5 border-b-2 border-amber-900`:`w-[500px] bg-amber-800/30  px-5 py-3 cursor-pointer mb-5 border-b-2 border-amber-900` }
+              className={
+                done.includes(id)
+                  ? `line-through w-[500px] px-5 py-3 cursor-pointer mb-5 border-b-2 border-amber-900`
+                  : `w-[500px] bg-amber-800/30  px-5 py-3 cursor-pointer mb-5 border-b-2 border-amber-900`
+              }
             >
               <p className="text-[10px] italic  ">
                 Created at:
@@ -82,10 +116,12 @@ return item!==id
                 </p>
               </div>
             </div>
-            <button className="opacity-0 group-hover:opacity-100 hover:rotate-12 text-amber-800 hover:text-red-800 hover:scale-115 hover:translate-2 transition-translate duration-300">
+            <button className="opacity-0 group-hover:opacity-100 hover:rotate-12 text-amber-800 hover:text-red-800 hover:scale-115 hover:translate-2 transition-translate duration-300 cursor-pointer" onClick={()=>{
+              handleDelete(id)
+            }} >
               <FaTrashAlt />{" "}
             </button>
-            <button className="opacity-0 group-hover:opacity-100 text-[23px] hover:translate-2 transition-translate duration-300 text-amber-800 hover:text-red-800 hover:scale-115  ">
+            <button className="opacity-0 group-hover:opacity-100 text-[23px] hover:translate-2 transition-translate duration-300 text-amber-800 hover:text-red-800 hover:scale-115 cursor-pointer ">
               <CiEdit />
             </button>
           </div>

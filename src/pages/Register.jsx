@@ -1,10 +1,14 @@
 import { FaArrowRight } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
+import { GetFormData } from "../requests";
 
 function Register() {
+  const handleSubmit=(e)=>{
+ e.preventDefault()
+  }
   return (
     <div className="flex flex-col gap-5 py-15 items-center px-10 bg-amber-800/30 h-screen ">
-      <form className="flex flex-col gap-5 p-10  text-amber-800/50 font-bold bg-[url('/image.png')] h-auto bg-cover rounded ">
+      <form className="flex flex-col gap-5 p-10  text-amber-800/50 font-bold bg-[url('/image.png')] h-auto bg-cover rounded " onSubmit={handleSubmit}>
         <label className="flex flex-col gap-2 w-auto ">
           {/* bg-amber-800/50 */}
           <span>Name:</span>

@@ -1,5 +1,8 @@
-import { useState } from "react";
+import { FaArrowRight } from "react-icons/fa";
+import { NavLink } from "react-router-dom";
 import UseFirestore from "../hooks/UseFirestore";
+import { useState } from "react";
+import { toast } from "sonner";
 
 function TodoForm() {
   const { addTodo } = UseFirestore();
@@ -8,49 +11,59 @@ function TodoForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addTodo("todos", {
+    if (!title || !deadline) {
+      toast.info("Please fill in all the fields!");
+
+      return;
+    }
+
+    addTodo("mytodos", {
       title,
       deadline,
-      date: new Date().toISOString(), // or use server timestamp
+      date: new Date(),
     });
-    // Clear form
+    e.target.reset();
     setTitle("");
     setDeadline("");
-    e.target.reset();
   };
 
   return (
-    <div className="flex flex-col gap-5 pb-20 pt-10 items-center pr-10">
+    <div className="flex flex-col gap-5 pb-20 pt-10 items-center pr-10 sm:flex-col-reverse ">
       <form
-        onSubmit={handleSubmit} // Fixed
-        className="flex flex-col gap-5 p-10 text-white font-bold bg-amber-800/30 h-auto bg-cover rounded"
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-5 lg:p-10 md:p-10 sm:p-6 lg:w-150 md:w-150 sm:w-100  text-white font-bold bg-amber-800/30  h-auto bg-cover rounded "
       >
-        <label className="flex flex-col gap-2 w-80">
+        <label className="flex flex-col gap-2 w-80 ">
+          {/* bg-amber-800/50 */}
           <span>Task:</span>
           <input
             type="text"
-            value={title} // Added controlled input
-            className="border py-1 px-2 outline-white rounded-lg"
-            placeholder="Create new todo"
-            onChange={(e) => setTitle(e.target.value)}
-            required
+            className="border py-1 px-2 outline-white rounded-lg lg:w-130 md:w-130 sm:w-90 "
+            placeholder=" Create new todo "
+            onChange={(e) => {
+              setTitle(e.target.value);
+            }}
           />
         </label>
-        <label className="flex flex-col gap-2 w-80">
+        <label className="flex flex-col gap-2 w-80 ">
           <span>Deadline:</span>
           <input
-            type="date" // Changed to date input
-            value={deadline} // Added controlled input
-            className="border py-1 px-2 outline-white rounded-lg"
-            onChange={(e) => setDeadline(e.target.value)}
-            required
+            type="date"
+            inputMode="text"
+            className="border py-1 px-2 outline-white rounded-lg  lg:w-130 md:w-130 sm:w-90 "
+            placeholder="December 31"
+            onChange={(e) => {
+              setDeadline(e.target.value);
+            }}
           />
         </label>
 
-        <button
-          type="submit"
-          className="cursor-pointer border py-1 px-2 rounded-lg outline-white"
-        >
+        <button className="cursor-pointer border py-1 px-2  rounded-lg lg:w-130 md:w-130 sm:w-90 outline-white ">
           Create
         </button>
       </form>
+    </div>
+  );
+}
+
+export default TodoForm;

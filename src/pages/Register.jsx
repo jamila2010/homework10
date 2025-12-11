@@ -3,12 +3,15 @@ import { NavLink } from "react-router-dom";
 import { GetFormData } from "../requests";
 
 function Register() {
-  const handleSubmit=(e)=>{
- e.preventDefault()
-  }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
   return (
     <div className="flex flex-col gap-5 py-15 items-center px-10 bg-amber-800/30 h-screen ">
-      <form className="flex flex-col gap-5 p-10  text-amber-800/50 font-bold bg-[url('/image.png')] h-auto bg-cover rounded " onSubmit={handleSubmit}>
+      <form
+        className="flex flex-col gap-5 p-10  text-amber-800/50 font-bold bg-[url('/image.png')] h-auto bg-cover rounded "
+        onSubmit={handleSubmit}
+      >
         <label className="flex flex-col gap-2 w-auto ">
           {/* bg-amber-800/50 */}
           <span>Name:</span>
@@ -54,9 +57,19 @@ function Register() {
             className="border py-1 px-2  rounded-lg outline-white"
           />
         </label>
-        <button className="cursor-pointer border py-1 px-2  rounded-lg outline-white ">Register</button>
-        <p className="w-60 mx-auto text-center flex "> <NavLink to={"/login"} className={"flex items-center text-center mx-auto "}> <span> Already registered? Login</span> <FaArrowRight/> </NavLink></p>
-       
+        <button className="cursor-pointer border py-1 px-2  rounded-lg outline-white ">
+          Register
+        </button>
+        <p className="w-60 mx-auto text-center flex ">
+          {" "}
+          <NavLink
+            to={"/login"}
+            className={"flex items-center text-center mx-auto "}
+          >
+            {" "}
+            <span> Already registered? Login</span> <FaArrowRight />{" "}
+          </NavLink>
+        </p>
       </form>
     </div>
   );

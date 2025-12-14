@@ -1,12 +1,29 @@
 import { FaTrashAlt } from "react-icons/fa";
 import { CiEdit } from "react-icons/ci";
 import { useState } from "react";
-import { collection, query, orderBy, onSnapshot, doc, deleteDoc} from "firebase/firestore";
+import {
+  collection,
+  query,
+  orderBy,
+  onSnapshot,
+  doc,
+  deleteDoc,
+} from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
 import UseFirestore from "../hooks/UseFirestore";
+import { TbPencilCancel } from "react-icons/tb";
 
-function TodoList({ todos }) {
-  const {deleteTodo} = UseFirestore()
+function TodoList({
+  todos,
+  edit,
+  handleEdit,
+  cancelEdit,
+  title,
+  setTitle,
+  deadline,
+  setDeadline
+}) {
+  const { deleteTodo } = UseFirestore();
   const [done, setDone] = useState([]);
   const months = [
     "January",
@@ -31,34 +48,36 @@ function TodoList({ todos }) {
         : [...prev, id];
     });
   };
-  const handleDelete=(id)=>{
+  const handleDelete = (id) => {
+    deleteTodo("mytodos", id);
+  };
 
-    deleteTodo("mytodos", id)
+  const q = query(collection(db, "mytodos"), orderBy("createdAt", "desc"));
 
-  }
-
-  const q=query(
-    collection(db, "mytodos"),
-    orderBy("createdAt", "desc"),
-  )
-
-  onSnapshot(q, (snapshot)=>{
-    const todos=snapshot.docs.map((doc)=>{
-   return  { id:doc.id,
-      ...doc.data()}
-    })
-  } )
+  onSnapshot(q, (snapshot) => {
+    const todos = snapshot.docs.map((doc) => {
+      return { id: doc.id, ...doc.data() };
+    });
+  });
 
   return (
     <div className="ml-6 cursive ">
-    {todos.length ?   <h1 className="ml-6 font-bold text-[25px] font3d text-amber-900 ">
-        Todos
-      </h1> : <h1 className="ml-6- mt-5  font-bold text-[25px] font3d text-amber-900 ">No todos created yet. </h1> }
-      {!todos.length && <div>
-       
-      </div> }
-      {todos.map(({ id, title, date, deadline }) => {
-      const deadlineDate= deadline?.toDate? deadline.toDate() : new Date(deadline)
+      {todos.length ? (
+        <h1 className="ml-6 font-bold text-[25px] font3d text-amber-900 ">
+          Todos
+        </h1>
+      ) : (
+        <h1 className="ml-6- mt-5  font-bold text-[25px] font3d text-amber-900 ">
+          No todos created yet.{" "}
+        </h1>
+      )}
+      {!todos.length && <div></div>}
+      {todos.map((todo) => {
+        const { id, title, date, deadline } = todo;
+        const isEditing = edit === id;
+        const deadlineDate = deadline?.toDate
+          ? deadline.toDate()
+          : new Date(deadline);
 
         const deadlineDay = deadlineDate.getDate();
         const deadlineMonth = deadlineDate.getMonth();
@@ -116,14 +135,34 @@ function TodoList({ todos }) {
                 </p>
               </div>
             </div>
-            <button className="opacity-0 group-hover:opacity-100 hover:rotate-12 text-amber-800 hover:text-red-800 hover:scale-115 hover:translate-2 transition-translate duration-300 cursor-pointer" onClick={()=>{
-              handleDelete(id)
-            }} >
+            <button
+              className="opacity-0 group-hover:opacity-100 hover:rotate-12 text-amber-800 hover:text-red-800 hover:scale-115 hover:translate-2 transition-translate duration-300 cursor-pointer"
+              onClick={() => {
+                handleDelete(id);
+              }}
+            >
               <FaTrashAlt />{" "}
             </button>
-            <button className="opacity-0 group-hover:opacity-100 text-[23px] hover:translate-2 transition-translate duration-300 text-amber-800 hover:text-red-800 hover:scale-115 cursor-pointer ">
-              <CiEdit />
-            </button>
+            {isEditing ? (
+              <button
+                onClick={() => {
+                  handleEdit("");
+                  cancelEdit()
+                }}
+                className="opacity-0 group-hover:opacity-100 text-[23px] hover:translate-2 transition-translate duration-300 text-amber-800 hover:text-red-800 hover:scale-115 cursor-pointer "
+              >
+                <TbPencilCancel />
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  handleEdit(todo);
+                }}
+                className="opacity-0 group-hover:opacity-100 text-[23px] hover:translate-2 transition-translate duration-300 text-amber-800 hover:text-red-800 hover:scale-115 cursor-pointer "
+              >
+                <CiEdit />
+              </button>
+            )}
           </div>
         );
       })}

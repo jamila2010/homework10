@@ -1,14 +1,9 @@
-import { FaArrowRight } from "react-icons/fa";
-import { NavLink } from "react-router-dom";
 import UseFirestore from "../hooks/UseFirestore";
-import { useState } from "react";
 import { toast } from "sonner";
 
-function TodoForm() {
-  const { addTodo } = UseFirestore();
-  const [title, setTitle] = useState("");
-  const [deadline, setDeadline] = useState("");
-
+function TodoForm({ edit , title, setTitle, deadline, setDeadline, setEdit}) {
+  const { addTodo, updateTodo } = UseFirestore();
+  // console.log(edit);
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!title || !deadline) {
@@ -16,13 +11,20 @@ function TodoForm() {
 
       return;
     }
+    if(edit){
+      updateTodo("mytodos", edit, title, deadline, setEdit)
+      setEdit(null)
+      setTitle("")
+      setDeadline("")
+      return
+    }
 
     addTodo("mytodos", {
       title,
       deadline,
       date: new Date(),
     });
-    e.target.reset();
+    // e.target.reset();
     setTitle("");
     setDeadline("");
   };
@@ -40,6 +42,7 @@ function TodoForm() {
             type="text"
             className="border py-1 px-2 outline-white rounded-lg lg:w-130 md:w-130 sm:w-90 "
             placeholder=" Create new todo "
+            value={title}
             onChange={(e) => {
               setTitle(e.target.value);
             }}
@@ -51,7 +54,7 @@ function TodoForm() {
             type="date"
             inputMode="text"
             className="border py-1 px-2 outline-white rounded-lg  lg:w-130 md:w-130 sm:w-90 "
-            placeholder="December 31"
+            value={deadline}
             onChange={(e) => {
               setDeadline(e.target.value);
             }}
@@ -59,7 +62,7 @@ function TodoForm() {
         </label>
 
         <button className="cursor-pointer border py-1 px-2  rounded-lg lg:w-130 md:w-130 sm:w-90 outline-white ">
-          Create
+         {edit? "Update": " Create"}
         </button>
       </form>
     </div>

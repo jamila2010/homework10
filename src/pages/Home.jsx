@@ -11,9 +11,9 @@ function Home() {
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="container mx-auto px-4 md:px-10 py-16 md:py-24 text-center">
-        <h1 className="text-4xl md:text-6xl font-bold text-gray-900">
+        <h1 className="text-4xl md:text-6xl font-bold text-gray-900 cursive ">
           Stay Organized, Stay{" "}
-          <span className="text-amber-500">Productive</span>
+          <span className="text-amber-900">Productive</span>
         </h1>
         <p className="text-lg md:text-xl text-gray-700 max-w-2xl mx-auto mt-4">
           Manage your daily tasks efficiently and never miss a deadline again.
@@ -21,13 +21,13 @@ function Home() {
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6">
           <Link
-            to="/myToDos"
-            className="text-white font-semibold py-3 px-8 rounded-lg transition-all duration-300 flex items-center justify-center gap-2"
-            style={{ backgroundColor: "#f59e0b" }} // amber-500
+            to="/todos"
+            className="text-white font-semibold py-3 px-8 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 bg-amber-900/80 "
+             
           >
             Get Started <FaArrowRight className="text-sm" />
           </Link>
-          <button className="border-2 border-amber-500 text-amber-500 font-semibold py-3 px-8 rounded-lg transition-all duration-300">
+          <button className="border-2 border-amber-900 text-amber-900 font-semibold py-3 px-8 rounded-lg transition-all duration-300">
             Learn More
           </button>
         </div>
@@ -37,7 +37,7 @@ function Home() {
       <section className="container mx-auto px-4 md:px-10 py-16 grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Feature 1 */}
         <div className="p-8 rounded-xl shadow-lg border border-gray-200 hover:shadow-2xl transition-shadow duration-300">
-          <div className="text-4xl text-amber-500 mb-4">
+          <div className="text-4xl text-amber-900 mb-4">
             <FaClipboardList />
           </div>
           <h3 className="text-xl font-bold text-gray-900 mb-3">
@@ -51,7 +51,7 @@ function Home() {
 
         {/* Feature 2 */}
         <div className="p-8 rounded-xl shadow-lg border border-gray-200 hover:shadow-2xl transition-shadow duration-300">
-          <div className="text-4xl text-amber-500 mb-4">
+          <div className="text-4xl text-amber-900 mb-4">
             <FaCheckCircle />
           </div>
           <h3 className="text-xl font-bold text-gray-900 mb-3">
@@ -65,7 +65,7 @@ function Home() {
 
         {/* Feature 3 */}
         <div className="p-8 rounded-xl shadow-lg border border-gray-200 hover:shadow-2xl transition-shadow duration-300">
-          <div className="text-4xl text-amber-500 mb-4">
+          <div className="text-4xl text-amber-600 mb-4">
             <FaFire />
           </div>
           <h3 className="text-xl font-bold text-gray-900 mb-3">
@@ -89,8 +89,8 @@ function Home() {
         </p>
         <Link
           to="/todos"
-          className="inline-block text-white font-semibold py-3 px-8 rounded-lg mt-6 transition-all duration-300 hover:shadow-lg"
-          style={{ backgroundColor: "#f59e0b" }} // amber-500
+          className="inline-block text-white font-semibold py-3 px-8 rounded-lg mt-6 transition-all duration-300 hover:shadow-lg bg-amber-900/80 "
+          // amber-500
         >
           Start Your Journey Now
         </Link>

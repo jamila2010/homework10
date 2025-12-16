@@ -3,20 +3,25 @@ import { NavLink } from "react-router-dom";
 import { GetFormData } from "../requests";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useAuth } from "../hooks/useAuth";
+import { GiH2O } from "react-icons/gi";
 
 function Register() {
   const [file, setFile] = useState("");
   const [url, setUrl] = useState("");
+
+  const { register, loading, error } = useAuth();
 
   const handleChange = (e) => {
     setFile(e.target.files[0]);
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    formDataValues = GetFormData(e.target);
+    const formDataValues = GetFormData(e.target);
 
     const data = GetFormData(e.target.files);
-    console.log(data)
+    console.log(data);
+    e.target.reset();
 
     if (!file) {
       toast.error("Image isn't recieved. Try again.");
@@ -36,16 +41,17 @@ function Register() {
           body: formData,
         });
         const data = await res.json();
-        const imageURL = data.data.url;
-        console.log({...formDataValues, imageURL})
+        const photoURL = data.data.url;
+        register({ ...formDataValues, photoURL });
+        console.log(photoURL);
       } catch (err) {
         console.log(err.message);
       }
-         console.log(imageURL)
     };
   };
   return (
     <div className="flex flex-col gap-5 py-15 items-center px-10 bg-amber-800/30 h-screen ">
+     
       <form
         className="flex flex-col gap-5 p-10  text-amber-800/50 font-bold bg-[url('/image.png')] h-auto bg-cover rounded "
         onSubmit={handleSubmit}
@@ -57,7 +63,7 @@ function Register() {
             type="text"
             className="border py-1 px-2 outline-white rounded-lg  "
             placeholder=" Name"
-            name="name"
+            name="displayName"
           />
         </label>
         <label className="flex flex-col gap-2">
@@ -97,13 +103,21 @@ function Register() {
             type="file"
             accept="image/*"
             className="border py-1 px-2  rounded-lg outline-white"
-            name="photo"
             onChange={handleChange}
           />
         </label>
-        <button className="cursor-pointer border py-1 px-2  rounded-lg outline-white ">
-          Register
-        </button>
+        {loading ? (
+          <button
+            disabled
+            className="cursor-pointer border py-1 px-2  rounded-lg outline-white "
+          >
+            Loading...
+          </button>
+        ) : (
+          <button className="cursor-pointer border py-1 px-2  rounded-lg outline-white ">
+            Register
+          </button>
+        )}
         <p className="w-60 mx-auto text-center flex ">
           {" "}
           <NavLink

@@ -1,7 +1,8 @@
 import { Link, NavLink } from "react-router-dom";
+import { useGlobalContext } from "../hooks/UseGlobalContext";
 
 function Navbar() {
-  const user = true;
+  const {user} = useGlobalContext()
   return (
     <header>
       <div className="flex justify-between py-3 container mx-auto px-20">
@@ -41,9 +42,9 @@ function Navbar() {
         )}
         {user && (
           <div className="flex items-center gap-5">
-            <p>Hello, Username</p>
+            <p>Hello, {user.displayName} </p>
             <img
-              src="https://picsum.photos/400"
+              src={user.photoURL}
               alt="user"
               className="w-12 rounded-full "
             />

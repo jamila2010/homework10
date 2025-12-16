@@ -1,43 +1,16 @@
 import { FaArrowRight } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import { GetFormData } from "../requests";
+import { useAuth } from "../hooks/useAuth";
+import { toast } from "sonner";
 
 function Login() {
-  const handleChange = (e) => {
-    setFile(e.target.files[0]);
-  };
+  const { login, loading, error } = useAuth();
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    formDataValues = GetFormData(e.target);
-
-    const data = GetFormData(e.target.files);
-    console.log(data)
-
-    if (!file) {
-      toast.error("Image isn't recieved. Try again.");
-      return;
-    }
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = async () => {
-      const basedata = reader.result.split(",")[1];
-      const formData = new FormData();
-      formData.append("key", "70b80c130fc3bc538ade42813a7a1346");
-      formData.append("image", basedata);
-
-      try {
-        const res = await fetch("https://api.imgbb.com/1/upload", {
-          method: "POST",
-          body: formData,
-        });
-        const data = await res.json();
-        const imageURL = data.data.url;
-        console.log({...formDataValues, imageURL})
-      } catch (err) {
-        console.log(err.message);
-      }
-    };
-    console.log(imageURL)
+    const data = GetFormData(e.target);
+    login(data);
   };
   return (
     <div className="flex flex-col gap-5 py-20 items-center px-10 bg-amber-800/30 h-screen ">
@@ -45,16 +18,6 @@ function Login() {
         onSubmit={handleSubmit}
         className="flex flex-col gap-5 p-10  text-amber-800/50 font-bold bg-[url('/image.png')] h-auto bg-cover rounded "
       >
-        <label className="flex flex-col gap-2 w-80 ">
-          {/* bg-amber-800/50 */}
-          <span>Name:</span>
-          <input
-            type="text"
-            className="border py-1 px-2 outline-white rounded-lg  "
-            placeholder=" Name"
-            name="name"
-          />
-        </label>
         <label className="flex flex-col gap-2 w-80 ">
           <span>Email:</span>
           <input
@@ -65,7 +28,7 @@ function Login() {
             name="email"
           />
         </label>
-       
+
         <label className="flex flex-col gap-2 w-80 ">
           <span>Password:</span>
           <input
@@ -77,9 +40,18 @@ function Login() {
           />
         </label>
 
-        <button className="cursor-pointer border py-1 px-2  rounded-lg outline-white ">
-          Login
-        </button>
+        {loading ? (
+          <button
+            disabled
+            className="cursor-pointer border py-1 px-2  rounded-lg outline-white "
+          >
+            Loading...
+          </button>
+        ) : (
+          <button className="cursor-pointer border py-1 px-2  rounded-lg outline-white ">
+            Login
+          </button>
+        )}
         <p>
           <NavLink
             to={"/register"}

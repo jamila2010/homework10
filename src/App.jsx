@@ -10,9 +10,12 @@ import Todos from "./pages/Todos";
 import Login from "./pages/Login";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import ErrorPage from "./pages/ErrorPage";
+import { useContext } from "react";
+import { useGlobalContext} from "./hooks/UseGlobalContext";
+
 
 function App() {
-  const user = true;
+  const {user} = useGlobalContext()
   const routes = createBrowserRouter([
     {
       path: "/",

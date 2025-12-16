@@ -2,17 +2,26 @@ import { createContext, useReducer } from "react";
 
 export const GlobalContext = createContext();
 
-function GlobalContextProvider({ children }) {
+export function GlobalContextProvider({ children }) {
+  const changeState = (state, { type, payload }) => {
+    switch (type) {
+      case "LOGREG":
+        return {
+          ...state,
+          user: payload,
+        };
+      case "LOGOUT":
+        return { ...state, user: null };
+    }
+  };
   const [state, dispatch] = useReducer(changeState, {
     user: null,
   });
   const context = createContext(GlobalContext);
 
   return (
-    <GlovalContext.Provider value={{ ...state, dispatch }}>
+    <GlobalContext.Provider value={{ ...state, dispatch }}>
       {children}
-    </GlovalContext.Provider>
+    </GlobalContext.Provider>
   );
 }
-
-export default GlobalContext;

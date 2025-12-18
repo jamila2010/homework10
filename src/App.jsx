@@ -15,7 +15,7 @@ import { useGlobalContext} from "./hooks/UseGlobalContext";
 
 
 function App() {
-  const {user} = useGlobalContext()
+  const {user, isAuthChange} = useGlobalContext()
   const routes = createBrowserRouter([
     {
       path: "/",
@@ -49,7 +49,9 @@ function App() {
       element: user ? <Navigate to={"/"} /> : <Login />,
     },
   ]);
-  return <RouterProvider router={routes} />;
+  return <>
+  {isAuthChange && <RouterProvider router={routes} /> }
+  </>
 }
 
 export default App;

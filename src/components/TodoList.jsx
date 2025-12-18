@@ -13,6 +13,7 @@ import { db } from "../firebase/firebaseConfig";
 import UseFirestore from "../hooks/UseFirestore";
 import { TbPencilCancel } from "react-icons/tb";
 
+
 function TodoList({
   todos,
   edit,
@@ -114,16 +115,16 @@ function TodoList({
               }
             >
               <p className="text-[10px] italic  ">
-                Created at:
+                Created at:~
                 {day >= 11 && day <= 13
-                  ? months[month] + day + "th" + time
+                  ? months[month] + day + "th" + " ~ " + time
                   : day % 10 == 1
-                  ? months[month] + day + "st" + time
+                  ? months[month] + day + "st" +  " ~ " + time
                   : day % 10 == 2
-                  ? months[month] + day + "nd" + time
+                  ? months[month] + day + "nd" +  " ~ " + time
                   : day % 10 == 3
-                  ? months[month] + day + "rd" + time
-                  : months[month] + day + "th" + time}{" "}
+                  ? months[month] + day + "rd" +  " ~ " + time
+                  : months[month] + day + "th" +  " ~ " + time}{" "}
               </p>
               <div className="flex justify-between gap-1">
                 <h1 className="font-medium text-[18px] ">Task:{title} </h1>

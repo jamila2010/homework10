@@ -1,7 +1,9 @@
 import { Link, NavLink } from "react-router-dom";
 import { useGlobalContext } from "../hooks/UseGlobalContext";
+import { useAuth } from "../hooks/useAuth";
 
 function Navbar() {
+  const {logout}= useAuth()
   const {user} = useGlobalContext()
   return (
     <header>
@@ -48,7 +50,7 @@ function Navbar() {
               alt="user"
               className="w-12 rounded-full "
             />
-            <button
+            <button onClick={logout}
               className="px-3 py-2 rounded-xl bg-red-100 text-red-600
 transition duration-300
 hover:bg-red-200 hover:shadow-lg hover:scale-105 active:scale-90"

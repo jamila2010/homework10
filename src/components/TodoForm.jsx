@@ -1,8 +1,10 @@
 import UseFirestore from "../hooks/UseFirestore";
 import { toast } from "sonner";
+import { useGlobalContext } from "../hooks/UseGlobalContext";
 
-function TodoForm({ edit , title, setTitle, deadline, setDeadline, setEdit}) {
+function TodoForm({ edit, title, setTitle, deadline, setDeadline, setEdit }) {
   const { addTodo, updateTodo } = UseFirestore();
+  const { user } = useGlobalContext();
   // console.log(edit);
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -11,18 +13,19 @@ function TodoForm({ edit , title, setTitle, deadline, setDeadline, setEdit}) {
 
       return;
     }
-    if(edit){
-      updateTodo("mytodos", edit, title, deadline, setEdit)
-      setEdit(null)
-      setTitle("")
-      setDeadline("")
-      return
+    if (edit) {
+      updateTodo("mytodos", edit, title, deadline, setEdit);
+      setEdit(null);
+      setTitle("");
+      setDeadline("");
+      return;
     }
 
     addTodo("mytodos", {
       title,
       deadline,
       date: new Date(),
+      uid:user.uid  
     });
     // e.target.reset();
     setTitle("");
@@ -62,7 +65,7 @@ function TodoForm({ edit , title, setTitle, deadline, setDeadline, setEdit}) {
         </label>
 
         <button className="cursor-pointer border py-1 px-2  rounded-lg lg:w-130 md:w-130 sm:w-90 outline-white ">
-         {edit? "Update": " Create"}
+          {edit ? "Update" : " Create"}
         </button>
       </form>
     </div>

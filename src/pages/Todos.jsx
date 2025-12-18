@@ -2,12 +2,15 @@ import { useCollection } from "../hooks/useCollection";
 import TodoList from "../components/TodoList";
 import TodoForm from "../components/TodoForm";
 import { useState, useEffect } from "react";
+import { useGlobalContext } from "../hooks/UseGlobalContext";
 
 function Todos() {
-  const { data: todos } = useCollection("mytodos");
   const [title, setTitle] = useState("");
   const [deadline, setDeadline] = useState("");
   const [edit, setEdit] = useState("");
+  const { user } = useGlobalContext();
+  const uid = user?.uid;
+  const { data: todos } = useCollection("mytodos", uid);
   const handleEdit = (todo) => {
     setEdit(todo.id);
     setTitle(todo.title);
